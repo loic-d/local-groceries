@@ -26,7 +26,7 @@ const base = {
 
 export default {
   base: { ...base },
-  h1: { ...base, size: base.size * 1.75, lineHeight: lineHeight(base.size * 2) },
+  h1: { ...base, size: base.size * 2.5, lineHeight: lineHeight(base.size * 3) },
   h2: { ...base, size: base.size * 1.5, lineHeight: lineHeight(base.size * 1.75) },
   h3: { ...base, size: base.size * 1.25, lineHeight: lineHeight(base.size * 1.5) },
   h4: { ...base, size: base.size * 1.1, lineHeight: lineHeight(base.size * 1.25) },

@@ -115,8 +115,9 @@ class Menu extends Component {
         .then(() => {
           this.props.closeSideMenu();
           Actions.login();
-        }).catch(() => {
-          Alert.alert('Oh uh!', 'Something went wrong.');
+        }).catch((err) => {
+          console.log('****, ', err);
+          //Alert.alert('Oh uh!', 'Something went wrong.');
         });
     }
   }
@@ -139,7 +140,7 @@ class Menu extends Component {
               {title}
             </Text>
           </View>
-        </TouchableOpacity>,
+        </TouchableOpacity>
       );
     });
 
@@ -159,8 +160,7 @@ class Menu extends Component {
                     AppStyles.textCenterAligned,
                   ]}
                 >
-                  Logged in as:{'\n'}
-                  {this.props.user.name}
+                  Logged in as: {this.props.user.name}
                 </Text>
 
                 <Spacer size={10} />

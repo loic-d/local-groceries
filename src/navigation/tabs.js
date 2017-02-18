@@ -21,6 +21,7 @@ import Error from '@components/general/Error';
 import StyleGuide from '@containers/StyleGuideView';
 import Recipes from '@containers/recipes/Browse/BrowseContainer';
 import RecipeView from '@containers/recipes/RecipeView';
+import ProductsListView from '@containers/products/ProductsListView';
 
 const navbarPropsTabs = {
   ...AppConfig.navbarProps,
@@ -33,56 +34,31 @@ const navbarPropsTabs = {
 
 /* Routes ==================================================================== */
 const scenes = (
-  <Scene key={'tabBar'} tabs tabBarIconContainerStyle={AppStyles.tabbar} pressOpacity={0.95}>
-    <Scene
-      {...navbarPropsTabs}
-      key={'recipes'}
-      title={'Recipes'}
-      icon={props => TabIcon({ ...props, icon: 'search' })}
-    >
-      <Scene
-        {...navbarPropsTabs}
-        key={'recipesListing'}
-        component={Recipes}
-        title={AppConfig.appName}
-        analyticsDesc={'Recipes: Browse Recipes'}
-      />
-      <Scene
-        {...AppConfig.navbarProps}
-        key={'recipeView'}
-        component={RecipeView}
-        getTitle={props => ((props.title) ? props.title : 'View Recipe')}
-        analyticsDesc={'RecipeView: View Recipe'}
-      />
+    <Scene key={'tabBar'} tabs tabBarIconContainerStyle={AppStyles.tabbar} pressOpacity={0.95}>
+        <Scene
+            {...navbarPropsTabs}
+            key={'products'}
+            title={'Products'}
+            icon={props => TabIcon({ ...props, icon: 'search' })}
+        >
+            <Scene
+                {...navbarPropsTabs}
+                key={'productsListing'}
+                component={ProductsListView}
+                title={AppConfig.appName}
+                analyticsDesc={'Products: Browser Products'}
+            />
+        </Scene>
+
+        <Scene
+            key={'styleGuide'}
+            {...navbarPropsTabs}
+            title={'Style Guide'}
+            component={StyleGuide}
+            icon={props => TabIcon({ ...props, icon: 'speaker-notes' })}
+            analyticsDesc={'StyleGuide: Style Guide'}
+        />
     </Scene>
-
-    <Scene
-      key={'timeline'}
-      {...navbarPropsTabs}
-      title={'Coming Soon'}
-      component={Placeholder}
-      icon={props => TabIcon({ ...props, icon: 'timeline' })}
-      analyticsDesc={'Placeholder: Coming Soon'}
-    />
-
-    <Scene
-      key={'error'}
-      {...navbarPropsTabs}
-      title={'Example Error'}
-      component={Error}
-      icon={props => TabIcon({ ...props, icon: 'error' })}
-      analyticsDesc={'Error: Example Error'}
-    />
-
-    <Scene
-      key={'styleGuide'}
-      {...navbarPropsTabs}
-      title={'Style Guide'}
-      component={StyleGuide}
-      icon={props => TabIcon({ ...props, icon: 'speaker-notes' })}
-      analyticsDesc={'StyleGuide: Style Guide'}
-    />
-  </Scene>
 );
 
 export default scenes;

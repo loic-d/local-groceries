@@ -28,12 +28,18 @@ const styles = StyleSheet.create({
     width: AppSizes.screen.width,
   },
   logo: {
-    width: AppSizes.screen.width * 0.85,
+    width: AppSizes.screen.width * 0.45,
     resizeMode: 'contain',
   },
   whiteText: {
     color: '#FFF',
   },
+  appTitle: {
+    color: '#FFF',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 1,
+    textShadowColor: '#444'
+  }
 });
 
 /* Component ==================================================================== */
@@ -45,6 +51,11 @@ class Authenticate extends Component {
       source={require('../../images/login.jpg')}
       style={[AppStyles.containerCentered, AppStyles.container, styles.background]}
     >
+
+      <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
+        <Text h1 style={[styles.appTitle]}>Local Groceries</Text>
+      </View>
+
       <Image
         source={require('../../images/logo.png')}
         style={[styles.logo]}
@@ -65,14 +76,14 @@ class Authenticate extends Component {
       <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
         <View style={[AppStyles.flex1]}>
           <Button
-            title={'Sign up'}
+            title={'Request an account'}
             icon={{ name: 'face' }}
             onPress={Actions.signUp}
           />
         </View>
       </View>
 
-      <Spacer size={15} />
+      {/*<Spacer size={15} />
 
       <Text p style={[AppStyles.textCenterAligned, styles.whiteText]}>
         - or -
@@ -92,7 +103,7 @@ class Authenticate extends Component {
           />
         </View>
         <View style={[AppStyles.flex1]} />
-      </View>
+      </View>*/}
 
       <Spacer size={40} />
     </Image>

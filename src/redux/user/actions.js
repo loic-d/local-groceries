@@ -6,49 +6,51 @@
  */
 
 import jwtDecode from 'jwt-decode';
+import { AsyncStorage } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 import AppAPI from '@lib/api';
+import APIConfig from '@constants/';
 
 /**
   * Login to API and receive Token
   */
 export function login(credentials, freshLogin) {
+    console.log('in login action', credentials, 'fresh login', freshLogin);
   return dispatch => new Promise(async (resolve, reject) => {
     const userCreds = credentials || null;
-
-    // Force logout, before logging in
-    if (freshLogin && AppAPI.deleteToken) await AppAPI.deleteToken();
-
-    if (!AppAPI.getToken) return resolve();
+      // Build the request body for /login in the customer service
+      let loginReqBody = {};
+      if(userCreds) {
+          const { username, password } = userCreds;
+          loginReqBody = {
+              email: username,
+              password: password
+          };
+      }
+      console.log('loginReqBody', loginReqBody);
 
     // Get a new token from API
-    return AppAPI.getToken(userCreds)
+    return AppAPI.login.post(null, loginReqBody)
       .then((token) => {
-        let decodedToken = '';
+        console.log('result from customer /login', token);
+        //TODO: Also set expiry date (24h from now)
+        // Set the token in async storage
+        return AsyncStorage.setItem('api/token', token.accessToken)
+            .then(() => {
+                //TODO: Fetch real user data
+                const userData = {
+                    id: "mydummyid",
+                    name: "John Deer",
+                };
+                console.log('will dispatch user');
+                dispatch({
+                    type: 'USER_REPLACE',
+                    data: userData
+                });
 
-        try {
-          decodedToken = jwtDecode(token);
-        } catch (err) {
-          return reject('Token decode failed.');
-        }
-
-        if (
-          !decodedToken || !decodedToken.data ||
-          !decodedToken.data.user || !decodedToken.data.user.id
-        ) {
-          return reject('Token decode failed.');
-        }
-
-        // Get user details from API, using my token
-        return AppAPI.users.get(decodedToken.data.user.id)
-          .then((userData) => {
-            dispatch({
-              type: 'USER_REPLACE',
-              data: userData,
+                return resolve(userData);
             });
-
-            return resolve(userData);
-          }).catch(err => reject(err));
       }).catch(err => reject(err));
   });
 }
@@ -59,10 +61,11 @@ export function login(credentials, freshLogin) {
 export function logout() {
   return dispatch => AppAPI.deleteToken()
     .then(() => {
-      dispatch({
-        type: 'USER_REPLACE',
-        data: {},
-      });
+        dispatch({
+            type: 'USER_REPLACE',
+            data: {},
+        });
+        Actions.authenticate({ type: 'reset' });
     });
 }
 

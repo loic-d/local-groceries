@@ -37,7 +37,7 @@ class Login extends Component {
         const regularExpression = /^.+@.+\..+$/i;
 
         return regularExpression.test(email);
-      },
+      }
     );
 
     // Password Validation - Must be 6 chars long
@@ -45,7 +45,7 @@ class Login extends Component {
       FormValidation.String, (password) => {
         if (password.length < 6) return false;
         return true;
-      },
+      }
     );
 
     this.state = {
@@ -101,6 +101,7 @@ class Login extends Component {
   login = () => {
     // Get new credentials and update
     const credentials = this.form.getValue();
+    console.log('credentials -->', credentials);
 
     // Form is valid
     if (credentials) {
@@ -117,7 +118,7 @@ class Login extends Component {
           password: credentials.Password,
         }, true).then(() => {
           this.setState({
-            resultMsg: { success: 'Awesome, you\'re now logged in!' },
+            resultMsg: { success: 'You are now logged in.' },
           }, () => {
             setTimeout(() => {
               Actions.app({ type: 'reset' });
@@ -168,14 +169,10 @@ class Login extends Component {
             </Text>
           </TouchableOpacity>
 
-          <Spacer size={10} />
-
-          <Text p style={[AppStyles.textCenterAligned]}>
-            - or -
-          </Text>
+          <Spacer size={20} />
 
           <Button
-            title={'Sign Up'}
+            title={'Request an account'}
             onPress={Actions.signUp}
           />
         </Card>

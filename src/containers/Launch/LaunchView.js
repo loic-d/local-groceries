@@ -39,18 +39,21 @@ class AppLaunch extends Component {
     // Show status bar on app launch
     StatusBar.setHidden(false, true);
 
-    // Try to authenticate based on existing token
-    this.props.login()
-      // Logged in, show index screen
-      .then(() => Actions.app({ type: 'reset' }))
-      // Not Logged in, show Login screen
-      .catch(() => Actions.authenticate({ type: 'reset' }));
+    Actions.authenticate({ type: 'reset' });
+
+    //TODO: See why first call fails and throws 500
+    //Try to authenticate based on existing token
+    //this.props.login()
+    //  // Logged in, show index screen
+    //  .then(() => Actions.app({ type: 'reset' }))
+    //  // Not Logged in, show Login screen
+    //  .catch(() => Actions.authenticate({ type: 'reset' }));
   }
 
   render = () => (
     <View style={[AppStyles.container]}>
       <Image
-        source={require('../../images/launch.jpg')}
+        source={require('../../images/login.jpg')}
         style={[styles.launchImage, AppStyles.containerCentered]}
       >
         <ActivityIndicator

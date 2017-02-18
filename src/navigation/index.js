@@ -40,13 +40,6 @@ export default Actions.create(
         {TabsScenes}
       </Scene>
 
-      {/* General */}
-      <Scene
-        key={'comingSoon'}
-        title={'Coming Soon'}
-        component={Placeholder}
-        analyticsDesc={'Placeholder: Coming Soon'}
-      />
     </Scene>
-  </Scene>,
+  </Scene>
 );

@@ -5,6 +5,7 @@
  * https://github.com/mcnamee/react-native-starter-app
  */
  /* global fetch console */
+import { AsyncStorage } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 import JWT from '@lib/api.jwt';
@@ -14,8 +15,8 @@ import { AppConfig, ErrorMessages, APIConfig } from '@constants/';
 import AppUtil from '@lib/util';
 
 // We'll use JWT for API Authentication
-// const Token = {};
-const Token = new JWT();
+const Token = {};
+// const Token = new JWT();
 
 // Config
 const HOSTNAME = APIConfig.hostname;
@@ -92,6 +93,9 @@ function serialize(obj, prefix) {
   * Sends requests to the API
   */
 function fetcher(method, endpoint, params, body) {
+
+  console.log('In fetcher', method, endpoint, params, body);
+
   return new Promise(async (resolve, reject) => {
     requestCounter += 1;
     const requestNum = requestCounter;
@@ -111,14 +115,26 @@ function fetcher(method, endpoint, params, body) {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         'User-Agent': USER_AGENT,
+        'hybris-languages': 'en'
       },
     };
 
+    // Get an access token to query the customer service
+    if(endpoint === APIConfig.endpoints.get(APIConfig.tokenKey)) {
+      const anonymousToken = await AppAPI.anonymousLogin.get();
+      if (anonymousToken) {
+        console.log('found anonymousToken', anonymousToken);
+        req.headers.Authorization = `Bearer ${anonymousToken.access_token}`;
+      }
+    }
+
     // Add Token
     // Don't add on the login endpoint
-    if (Token.getStoredToken && endpoint !== APIConfig.endpoints.get(APIConfig.tokenKey)) {
-      const apiToken = await Token.getStoredToken();
+    if (endpoint !== APIConfig.endpoints.get(APIConfig.tokenKey)) {
+      console.log('NOT A LOGIN REQUEST');
+      const apiToken = await AsyncStorage.getItem('api/token');
       if (apiToken) {
+        console.log('WIll add Bearer ', apiToken);
         req.headers.Authorization = `Bearer ${apiToken}`;
       }
     }
@@ -154,11 +170,16 @@ function fetcher(method, endpoint, params, body) {
 
     const thisUrl = HOSTNAME + endpoint + urlParams;
 
+    console.log('URL', thisUrl, 'REQ', req, 'BODY', body);
+
     debug('', `API Request #${requestNum} to ${thisUrl}`);
 
     // Make the request
     return fetch(thisUrl, req)
-      .then(async (rawRes) => {
+      .then( async (rawRes) => {
+
+        console.log('raw response from fetcher', rawRes);
+
         // API got back to us, clear the timeout
         clearTimeout(apiTimedOut);
 
@@ -166,6 +187,7 @@ function fetcher(method, endpoint, params, body) {
 
         try {
           jsonRes = await rawRes.json();
+          console.log('after .json() ', jsonRes);
         } catch (error) {
           const err = { message: ErrorMessages.invalidJson };
           throw err;
@@ -177,6 +199,7 @@ function fetcher(method, endpoint, params, body) {
       })
       .then((res) => {
         debug(res, `API Response #${requestNum} from ${thisUrl}`);
+        console.log('will resolve fetcher with ', res);
         return resolve(res);
       })
       .catch((err) => {
@@ -186,6 +209,7 @@ function fetcher(method, endpoint, params, body) {
         const apiCredentials = Token.getStoredCredentials ? Token.getStoredCredentials() : {};
 
         // If unauthorized, try logging them back in
+        //TODO: Update method to retrieve token
         if (
           !AppUtil.objIsEmpty(apiCredentials) &&
           err &&
@@ -213,7 +237,9 @@ function fetcher(method, endpoint, params, body) {
 const AppAPI = {
   handleError,
   getToken: Token.getToken,
-  deleteToken: Token.deleteToken,
+  deleteToken: async () => {
+    await AsyncStorage.setItem('api/token', '');
+  }
 };
 
 ENDPOINTS.forEach((endpoint, key) => {
