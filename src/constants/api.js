@@ -22,6 +22,7 @@ export default {
     ['login', `/hybris/customer/v1/${TENANT}/login`],
     ['anonymousLogin', `/hybris/customerlogin/v1/auth/anonymous/login?client_id=${CLIENT_ID}&hybris-tenant=${TENANT}`],
     ['products', `/hybris/productdetails/v2/${TENANT}/productdetails`],
+    ['createCart', `/hybris/cart/v1/${TENANT}/carts`],
 
     //TODO: Clean up
     ['users', '/wp-json/wp/v2/users'],

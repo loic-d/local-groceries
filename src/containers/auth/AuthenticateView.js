@@ -36,9 +36,12 @@ const styles = StyleSheet.create({
   },
   appTitle: {
     color: '#FFF',
-    textShadowOffset: {width: 1, height: 1},
-    textShadowRadius: 1,
-    textShadowColor: '#444'
+    textShadowOffset: {width: 2, height: 1},
+    textShadowRadius: 2,
+    textShadowColor: '#444',
+    fontFamily: 'Avenir',
+    fontWeight: '300',
+    fontSize: 42
   }
 });
 
@@ -82,28 +85,6 @@ class Authenticate extends Component {
           />
         </View>
       </View>
-
-      {/*<Spacer size={15} />
-
-      <Text p style={[AppStyles.textCenterAligned, styles.whiteText]}>
-        - or -
-      </Text>
-
-      <Spacer size={10} />
-
-      <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
-        <View style={[AppStyles.flex1]} />
-        <View style={[AppStyles.flex2]}>
-          <Button
-            small
-            title={'Skip'}
-            onPress={Actions.app}
-            backgroundColor={'#CB009E'}
-            raised={false}
-          />
-        </View>
-        <View style={[AppStyles.flex1]} />
-      </View>*/}
 
       <Spacer size={40} />
     </Image>

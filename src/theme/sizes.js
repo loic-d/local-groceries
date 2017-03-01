@@ -26,8 +26,8 @@ export default {
   statusBarHeight: (Platform.OS === 'ios') ? 16 : 0,
   tabbarHeight: 51,
 
-  padding: 20,
-  paddingSml: 10,
+  padding: 15,
+  paddingSml: 5,
 
   borderRadius: 2,
 };

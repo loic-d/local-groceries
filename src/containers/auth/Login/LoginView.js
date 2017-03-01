@@ -101,7 +101,6 @@ class Login extends Component {
   login = () => {
     // Get new credentials and update
     const credentials = this.form.getValue();
-    console.log('credentials -->', credentials);
 
     // Form is valid
     if (credentials) {

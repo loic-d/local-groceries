@@ -19,6 +19,7 @@ export function login(credentials, freshLogin) {
     console.log('in login action', credentials, 'fresh login', freshLogin);
   return dispatch => new Promise(async (resolve, reject) => {
     const userCreds = credentials || null;
+
       // Build the request body for /login in the customer service
       let loginReqBody = {};
       if(userCreds) {
@@ -28,22 +29,22 @@ export function login(credentials, freshLogin) {
               password: password
           };
       }
-      console.log('loginReqBody', loginReqBody);
 
     // Get a new token from API
     return AppAPI.login.post(null, loginReqBody)
       .then((token) => {
-        console.log('result from customer /login', token);
-        //TODO: Also set expiry date (24h from now)
+        console.log(`***** Token return by the login API ${token.accessToken} *****`);
+        // TODO: Also set expiry date (24h from now)
         // Set the token in async storage
         return AsyncStorage.setItem('api/token', token.accessToken)
             .then(() => {
-                //TODO: Fetch real user data
+                // TODO: Fetch real user data
+                // Persist customer ID, and send it when creating new cart
                 const userData = {
                     id: "mydummyid",
                     name: "John Deer",
                 };
-                console.log('will dispatch user');
+
                 dispatch({
                     type: 'USER_REPLACE',
                     data: userData

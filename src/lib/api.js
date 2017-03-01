@@ -94,7 +94,7 @@ function serialize(obj, prefix) {
   */
 function fetcher(method, endpoint, params, body) {
 
-  console.log('In fetcher', method, endpoint, params, body);
+  console.log(`****** Fetcher - Method: ${method} - Endpoint: ${endpoint} - Params: ${params} - Body: `, body);
 
   return new Promise(async (resolve, reject) => {
     requestCounter += 1;
@@ -123,7 +123,7 @@ function fetcher(method, endpoint, params, body) {
     if(endpoint === APIConfig.endpoints.get(APIConfig.tokenKey)) {
       const anonymousToken = await AppAPI.anonymousLogin.get();
       if (anonymousToken) {
-        console.log('found anonymousToken', anonymousToken);
+        console.log('GET an anonymousLogin token', anonymousToken);
         req.headers.Authorization = `Bearer ${anonymousToken.access_token}`;
       }
     }
@@ -131,10 +131,9 @@ function fetcher(method, endpoint, params, body) {
     // Add Token
     // Don't add on the login endpoint
     if (endpoint !== APIConfig.endpoints.get(APIConfig.tokenKey)) {
-      console.log('NOT A LOGIN REQUEST');
       const apiToken = await AsyncStorage.getItem('api/token');
       if (apiToken) {
-        console.log('WIll add Bearer ', apiToken);
+        console.log('Found api/token local storage ', apiToken);
         req.headers.Authorization = `Bearer ${apiToken}`;
       }
     }
@@ -170,15 +169,13 @@ function fetcher(method, endpoint, params, body) {
 
     const thisUrl = HOSTNAME + endpoint + urlParams;
 
-    console.log('URL', thisUrl, 'REQ', req, 'BODY', body);
+    console.log(`****** Built endpoint URL ${thisUrl} ******`);
 
     debug('', `API Request #${requestNum} to ${thisUrl}`);
 
     // Make the request
     return fetch(thisUrl, req)
       .then( async (rawRes) => {
-
-        console.log('raw response from fetcher', rawRes);
 
         // API got back to us, clear the timeout
         clearTimeout(apiTimedOut);
@@ -187,19 +184,17 @@ function fetcher(method, endpoint, params, body) {
 
         try {
           jsonRes = await rawRes.json();
-          console.log('after .json() ', jsonRes);
         } catch (error) {
           const err = { message: ErrorMessages.invalidJson };
           throw err;
         }
 
         // Only continue if the header is successful
-        if (rawRes && rawRes.status === 200) { return jsonRes; }
+        if (rawRes && rawRes.status === 200 || rawRes.status === 204 || rawRes.status === 201) { return jsonRes; }
         throw jsonRes;
       })
       .then((res) => {
         debug(res, `API Response #${requestNum} from ${thisUrl}`);
-        console.log('will resolve fetcher with ', res);
         return resolve(res);
       })
       .catch((err) => {

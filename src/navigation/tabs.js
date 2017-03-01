@@ -21,7 +21,7 @@ import Error from '@components/general/Error';
 import StyleGuide from '@containers/StyleGuideView';
 import Recipes from '@containers/recipes/Browse/BrowseContainer';
 import RecipeView from '@containers/recipes/RecipeView';
-import ProductsListView from '@containers/products/ProductsListView';
+import ProductsView from '@containers/products/ProductsView';
 
 const navbarPropsTabs = {
   ...AppConfig.navbarProps,
@@ -44,7 +44,7 @@ const scenes = (
             <Scene
                 {...navbarPropsTabs}
                 key={'productsListing'}
-                component={ProductsListView}
+                component={ProductsView}
                 title={AppConfig.appName}
                 analyticsDesc={'Products: Browser Products'}
             />
