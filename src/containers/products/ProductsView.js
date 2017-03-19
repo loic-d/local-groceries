@@ -1,9 +1,7 @@
 /**
- * Style Guide
- *
- * React Native Starter App
- * https://github.com/mcnamee/react-native-starter-app
+ * Products View
  */
+
 import React, { Component, PropTypes } from 'react';
 import {
     View,
@@ -16,7 +14,6 @@ import {
 } from 'react-native';
 
 import { TabViewAnimated, TabBarTop } from 'react-native-tab-view';
-import { SocialIcon } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
@@ -44,14 +41,20 @@ import {
 } from '@components/ui/';
 
 /* Redux ==================================================================== */
-// Array of Products from the store will be sent to the component
+// Products, current cart ID and customer ID will be passed from the store to the component
 const mapStateToProps = state => ({
     products: state.products.products,
+    cartId: state.cart.id,
+    customerId: state.user.id
 });
 
 // Map getProducts action to the component
 const mapDispatchToProps = {
     getProducts: ProductsActions.getProducts,
+    addItemToCart: CartActions.addItemToCart,
+    getCartById: CartActions.getCartById,
+    getCustomerCart: CartActions.getCustomerCart,
+    createCart: CartActions.createCart
 };
 
 /* Styles ==================================================================== */
@@ -85,9 +88,18 @@ class ProductsView extends Component {
     static componentName = 'ProductsView';
 
     static propTypes = {
+        // Data
         products: PropTypes.arrayOf(PropTypes.object),
+        cartId: PropTypes.string,
+        customerId: PropTypes.string,
+
+        // Functions
         getProducts: PropTypes.func.isRequired,
-    }
+        addItemToCart: PropTypes.func.isRequired,
+        getCartById: PropTypes.func.isRequired,
+        getCustomerCart: PropTypes.func.isRequired,
+        createCart: PropTypes.func.isRequired
+    };
 
     constructor(props) {
         super(props);
@@ -102,7 +114,7 @@ class ProductsView extends Component {
                 ],
             },
             products: [],
-            cartId: null
+            cartId: this.props.cartId
         };
     }
 
@@ -110,30 +122,53 @@ class ProductsView extends Component {
         // Fetch the list of products
         this.fetchProducts();
 
-        // Check if we have a cartId in AsyncStorage
-        CartActions.getCartId()
-            .then((cartId) => {
-                console.log('Cart ID from AsyncStorage ', cartId);
-               if(!cartId) {
-                   console.log('componentDidMount, no cartId in AsyncStorage');
-                   // If we don't, create a new cart
-                   AppAPI.createCart.post(null, {currency: 'CAD'})
-                       .then((response) => {
-                           console.log('****  In cart/actions.js - API call successful (POST Create cart)  ****', response);
-                           // Set the cartId in AsyncStorage
-                           AsyncStorage.setItem('cart/cartId', response.cartId);
-                           // and in component state
-                           this.setState( { cartId: response.cartId } );
-                       })
-                       .catch((error) => {
-                           // TODO: Find why success goes in catch...
-                           console.log('***** ERROR ', error)
-                       });
-               }
-               else {
-                   this.setState( { cartId: cartId } );
-               }
-            });
+        // Get the customer cart or create a new one
+        this.getOrCreateCart();
+    }
+
+    componentWillReceiveProps(nextProp) {
+        this.setState({
+            cartId: nextProp.cartId
+        });
+    }
+
+    /**
+     * Fetch all products and update the state of the component
+     */
+    fetchProducts = () => {
+        this.props.getProducts()
+            .then(() => {
+                this.setState({
+                    products: this.props.products
+                });
+            })
+    }
+
+    /**
+     * Creates a new cart if the customer does not have a current cart
+     */
+    getOrCreateCart() {
+        if(!this.state.cartId) {
+            this.props.getCustomerCart(this.props.customerId)
+                .then((cart) => {
+                    const cartId = cart.id;
+                    // The customer already had a current cart. Retrive the cart cart content.
+                    this.props.getCartById(cartId);
+                })
+                .catch(() => {
+                    // The customer did not have a current cart. Create a new one
+                    this.props.createCart(this.props.customerId)
+                        .then((cart) => {
+                            // Set the cartId in the current state
+                            this.setState({
+                                cartId: cart.cartId
+                            });
+                        })
+                        .catch(() => {
+                            console.log('Error when creating cart', error);
+                        });
+                });
+        }
     }
 
     /**
@@ -145,57 +180,75 @@ class ProductsView extends Component {
         });
     }
 
-    fetchProducts = () => {
-        this.props.getProducts()
-            .then(() => {
-                this.setState({
-                    products: this.props.products
-                });
-            })
-    }
-
+    /**
+     * Render the list of product cards
+     * @param products
+     * @returns {Array}
+     */
     renderProducts = (products) => {
-        // Function called onPress add to cart
+        // Function called onPress add to cart button
         // Delegates to component method
-        const addProductToCart = (productYrn) => {
-            this.addProductToCart(productYrn);
+        const addItemToCart = (product) => {
+            this.addItemToCart(product);
         };
 
+        // This array will each product component
         const productsJsx = [];
         let iterator = 1;
-        products.forEach((productObj) => {
+
+        products.forEach((product) => {
             productsJsx.push(
                 <View key={`product-${iterator}`} style={[AppStyles.row]}>
                     <Card
-                        image={{ uri: productObj.image }}
+                        image={{ uri: product.image }}
                     >
                         <View style={[AppStyles.paddingLeftSml, AppStyles.paddingBottomSml]}>
-                            <Text h3>{productObj.name} {productObj.unit.length > 0 ? `- ${productObj.unit}` : ''}</Text>
+                            <Text h3>{product.name} {product.unit.length > 0 ? `- ${product.unit}` : ''}</Text>
                             <Text style={[styles.price]}>
-                                ${productObj.price} ({productObj.currency})
+                                ${product.displayPrice} ({product.currency})
                             </Text>
                             <Text style={[styles.description]}>
-                                {productObj.description}
+                                {product.description}
                             </Text>
                             <Button
                                 small
                                 outlined
-                                iconRight
                                 title={'Add to cart'}
-                                onPress={() => addProductToCart(productObj.yrn)}
+                                onPress={() => addItemToCart(product)}
                             />
                         </View>
                     </Card>
                 </View>
             );
             iterator += 1;
-        })
+        });
 
         return productsJsx;
     }
 
-    addProductToCart(productYrn) {
-        console.log(`****** ${productYrn} will be added to cart ${this.state.cartId} ******`);
+    /**
+     * Add a product to cart
+     * @param product
+     */
+    addItemToCart(product) {
+        // Make sure we have a cartId in the current component state
+        if(this.state.cartId) {
+            console.log('Found cartId', this.state.cartId);
+            this.props.addItemToCart(this.state.cartId, product.yrn, product.price);
+        }
+        else {
+            this.props.createCart(this.props.customerId)
+                .then((cart) => {
+                    // Set the cartId in the current state
+                    this.setState({
+                        cartId: cart.cartId
+                    });
+                    this.props.addItemToCart(this.state.cartId, product.yrn, product.price);
+                })
+                .catch(() => {
+                    console.log('Error when creating cart', error);
+                });
+        }
     }
 
     /**
@@ -276,8 +329,8 @@ class ProductsView extends Component {
             style={styles.tabbar}
             indicatorStyle={styles.tabbarIndicator}
             renderLabel={scene => (
-        <Text style={[styles.tabbar_text]}>{scene.route.title}</Text>
-      )}
+                <Text style={[styles.tabbar_text]}>{scene.route.title}</Text>
+            )}
         />
     )
 
@@ -293,6 +346,4 @@ class ProductsView extends Component {
 }
 
 /* Export Component ==================================================================== */
-//export default ProductsView;
-
 export default connect(mapStateToProps, mapDispatchToProps)(ProductsView);

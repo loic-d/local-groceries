@@ -94,7 +94,7 @@ function serialize(obj, prefix) {
   */
 function fetcher(method, endpoint, params, body) {
 
-  console.log(`****** Fetcher - Method: ${method} - Endpoint: ${endpoint} - Params: ${params} - Body: `, body);
+  debug('', `Method: ${method} - Endpoint: ${endpoint} - Params: ${params} - Body: ${JSON.stringify(body)}`);
 
   return new Promise(async (resolve, reject) => {
     requestCounter += 1;
@@ -123,7 +123,7 @@ function fetcher(method, endpoint, params, body) {
     if(endpoint === APIConfig.endpoints.get(APIConfig.tokenKey)) {
       const anonymousToken = await AppAPI.anonymousLogin.get();
       if (anonymousToken) {
-        console.log('GET an anonymousLogin token', anonymousToken);
+        debug('', `AnonymousLogin token retrieved ${anonymousToken.access_token}`);
         req.headers.Authorization = `Bearer ${anonymousToken.access_token}`;
       }
     }
@@ -133,7 +133,7 @@ function fetcher(method, endpoint, params, body) {
     if (endpoint !== APIConfig.endpoints.get(APIConfig.tokenKey)) {
       const apiToken = await AsyncStorage.getItem('api/token');
       if (apiToken) {
-        console.log('Found api/token local storage ', apiToken);
+        debug('', `Found api/token in AsyncStorage ${apiToken}`);
         req.headers.Authorization = `Bearer ${apiToken}`;
       }
     }
@@ -168,8 +168,6 @@ function fetcher(method, endpoint, params, body) {
     if (body) req.body = JSON.stringify(body);
 
     const thisUrl = HOSTNAME + endpoint + urlParams;
-
-    console.log(`****** Built endpoint URL ${thisUrl} ******`);
 
     debug('', `API Request #${requestNum} to ${thisUrl}`);
 

@@ -13,6 +13,7 @@ import {
   StatusBar,
   StyleSheet,
   ActivityIndicator,
+  AsyncStorage
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
@@ -39,15 +40,8 @@ class AppLaunch extends Component {
     // Show status bar on app launch
     StatusBar.setHidden(false, true);
 
+    // TODO: Check if we have a valid persisted token to avoid useless re-auth
     Actions.authenticate({ type: 'reset' });
-
-    //TODO: See why first call fails and throws 500
-    //Try to authenticate based on existing token
-    //this.props.login()
-    //  // Logged in, show index screen
-    //  .then(() => Actions.app({ type: 'reset' }))
-    //  // Not Logged in, show Login screen
-    //  .catch(() => Actions.authenticate({ type: 'reset' }));
   }
 
   render = () => (

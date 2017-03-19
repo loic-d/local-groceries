@@ -9,7 +9,7 @@ import AppUtil from '@lib/util';
 
 // Set initial state
 export const initialState = {
-    products: [],
+    products: []
 };
 
 export default function productReducer(state = initialState, action) {
@@ -26,13 +26,18 @@ export default function productReducer(state = initialState, action) {
                     name: item.product.name['en'],
                     description: item.product.description['en'],
                     image: item.product.media[0].url,
-                    price: item.prices[0].effectiveAmount,
+                    displayPrice: item.prices[0].effectiveAmount,
+                    price: {
+                        yrn: item.prices[0].yrn,
+                        originalAmount: item.prices[0].originalAmount,
+                        effectiveAmount: item.prices[0].effectiveAmount,
+                        currency: item.prices[0].currency,
+                        priceId: item.prices[0].priceId
+                    },
                     currency: item.prices[0].currency,
                     unit: item.prices[0].measurementUnit ? `${item.prices[0].measurementUnit.quantity}${item.prices[0].measurementUnit.unitCode}` : ''
                 }));
             }
-
-            console.log('**** Product reducer will return ****', products);
 
             return {
                 ...state,

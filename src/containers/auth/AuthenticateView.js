@@ -36,12 +36,13 @@ const styles = StyleSheet.create({
   },
   appTitle: {
     color: '#FFF',
-    textShadowOffset: {width: 2, height: 1},
+    textShadowOffset: {width: 1, height: 1},
     textShadowRadius: 2,
     textShadowColor: '#444',
     fontFamily: 'Avenir',
-    fontWeight: '300',
-    fontSize: 42
+    fontWeight: '400',
+    fontSize: 50,
+    lineHeight: 60
   }
 });
 
@@ -57,12 +58,8 @@ class Authenticate extends Component {
 
       <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
         <Text h1 style={[styles.appTitle]}>Local Groceries</Text>
+        <Spacer size={110} />
       </View>
-
-      <Image
-        source={require('../../images/logo.png')}
-        style={[styles.logo]}
-      />
 
       <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
         <View style={[AppStyles.flex1]}>

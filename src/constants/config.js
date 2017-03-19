@@ -18,9 +18,10 @@ export default {
   gaTrackingId: (__DEV__) ? 'UA-84284256-2' : 'UA-84284256-1',
 
   // URLs
+  // TODO: Implement reset password and sign up features
   urls: {
-    resetPassword: 'http://wp-api.mcnam.ee/wp-login.php?action=lostpassword',
-    signUp: 'http://wp-api.mcnam.ee/wp-login.php?action=register',
+    resetPassword: 'http://dummy.url',
+    signUp: 'http://dummy.url',
   },
 
   // Navbar Props

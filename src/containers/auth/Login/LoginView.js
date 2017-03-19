@@ -7,6 +7,8 @@
 import React, { Component, PropTypes } from 'react';
 import {
   ScrollView,
+  View,
+  StyleSheet,
   AsyncStorage,
   TouchableOpacity,
 } from 'react-native';
@@ -19,6 +21,16 @@ import { AppStyles } from '@theme/';
 
 // Components
 import { Alerts, Card, Spacer, Text, Button } from '@ui/';
+
+/* Styles ==================================================================== */
+const styles = StyleSheet.create({
+  loginContainer: {
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: AppStyles.padding.paddingHorizontal * 1.1,
+    paddingVertical: AppStyles.padding.paddingVertical * 1.1,
+    flex: 1
+  }
+});
 
 /* Component ==================================================================== */
 class Login extends Component {
@@ -76,6 +88,7 @@ class Login extends Component {
             secureTextEntry: true,
           },
         },
+        auto: 'placeholders'
       },
     };
   }
@@ -121,7 +134,7 @@ class Login extends Component {
           }, () => {
             setTimeout(() => {
               Actions.app({ type: 'reset' });
-            }, 1000);
+            }, 200);
           });
         }).catch((err) => {
           const error = AppAPI.handleError(err);
@@ -141,12 +154,14 @@ class Login extends Component {
         style={[AppStyles.container]}
         contentContainerStyle={[AppStyles.container]}
       >
-        <Card>
+        <View style={styles.loginContainer}>
           <Alerts
             status={this.state.resultMsg.status}
             success={this.state.resultMsg.success}
             error={this.state.resultMsg.error}
           />
+
+          <Spacer size={5} />
 
           <Form
             ref={(b) => { this.form = b; }}
@@ -160,7 +175,7 @@ class Login extends Component {
             onPress={this.login}
           />
 
-          <Spacer size={10} />
+          <Spacer size={12} />
 
           <TouchableOpacity onPress={Actions.passwordReset}>
             <Text p style={[AppStyles.textCenterAligned, AppStyles.link]}>
@@ -168,13 +183,17 @@ class Login extends Component {
             </Text>
           </TouchableOpacity>
 
-          <Spacer size={20} />
+          <Spacer size={30} />
 
+          <Text style={[AppStyles.textCenterAligned, AppStyles.subtext]}>Not a member of Local Groceries?</Text>
+          <Spacer size={10} />
           <Button
+            outlined
+            small
             title={'Request an account'}
             onPress={Actions.signUp}
           />
-        </Card>
+          </View>
       </ScrollView>
     );
   }

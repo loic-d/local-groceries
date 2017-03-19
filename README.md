@@ -1,77 +1,34 @@
-[![GitHub tag](https://img.shields.io/github/tag/mcnamee/react-native-starter-app.svg?style=flat-square)](https://github.com/mcnamee/react-native-starter-app/tags)
-[![GitHub contributors](https://img.shields.io/github/contributors/mcnamee/react-native-starter-app.svg?style=flat-square)](https://github.com/mcnamee/react-native-starter-app/contributors)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/mcnamee/react-native-starter-app/master/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues/mcnamee/react-native-starter-app.svg?style=flat-square)](https://github.com/mcnamee/react-native-starter-app/issues)
-[![GitHub closed issues](https://img.shields.io/github/issues-closed/mcnamee/react-native-starter-app.svg?style=flat-square)](https://github.com/mcnamee/react-native-starter-app/issues-closed)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/mcnamee/react-native-starter-app.svg?style=flat-square)](https://github.com/mcnamee/react-native-starter-app/issues-pr)
+# Local Groceries: connect farmers and restaurant owners
 
-![alt text](https://dl.dropboxusercontent.com/u/46690444/GITHUB/rnsk-logo.jpg "React Native Starter Kit")
+This application is a POC developed for a presentation I gave on React Native and Hybris as a Service (YaaS) at SAP d-kom (our annual internal developer conference). It allows restaurant owners to buy products from local farms.
+The primary goal was to show how easy and quick it is to build native applications using React Native for the front-end and YaaS micro-services for the back-end. Some features need to be added (My Account, My Orders, Edit Cart, etc.), but the complete checkout flow is working.
+[React Native Starter App](https://github.com/mcnamee/react-native-starter-app) was used to speed up the development.
 
-# React Native Starter Kit
-
-React Native Starter Kit helps you get started with React Native. It contains a bunch of helpful components, building blocks and basic structure to allow you to jump straight into building an app.
-
-![alt text](https://dl.dropboxusercontent.com/u/46690444/GITHUB/rnsk-v2-screens.jpg "React Native Starter App")
-
----
-
-## Docs
-
-1. [Features](#features)
-1. **Before you start**
-  1. [Getting Started with React Native](/docs/react-native.md)
-  1. [React Native Quick Tips](/docs/quick-tips.md)
-  1. [Understanding the File Structure](#understanding-the-file-structure)
-  1. [Opinions Guiding this Project](/docs/opinions.md)
-1. **Using RNSK**
-  1. [Getting Up and Running with RNSK](#getting-started)
-  1. [Renaming the App from StarterKit](/docs/renaming.md)
-  1. [Routing / Navigating](/src/navigation/README.md)
-  1. [Using Google Analytics](/docs/google-analytics.md)
-  1. [Interacting with a REST API](/docs/api.md)
-  1. [Testing](/docs/testing.md)
-1. [Contributing](/docs/contributing.md)
-1. [Licence](LICENSE)
-
----
+## Installation
+* Create a [YaaS account](https://www.yaas.io/register/) if you don't have one
+* [Set-up a new project](https://devportal.yaas.io/gettingstarted/setupaproject/index.html) with a client and the following subscriptions: Product, Cart, Customer, Checkout, Site, Price, Order
+* Add products in Builder
+* Create a new user using the `/{tenant}/signup` endpoint of the Customer Service (using Postman for example)
+* Add user details, billing and shipping address using the `/{tenant}/me` and `/{tenant}/me/addresses` endpoints of the Customer service
+* Clone the repo: `git clone git@github.com:loic-d/local-groceries.git`
+* Install the dependencies: `npm install`
+* Update `local-groceries/src/constants/api.js` with your `TENANT` and `CLIENT_ID`
+* Build and start for iOS: `react-native run-ios`
 
 ## Features
+* Authentication
+* Browse products
+* Add products to cart
+* View my cart
+* Checkout
 
-| Feature | Summary |
-| --- | --- |
-| [Redux](https://github.com/reactjs/react-redux) | A predictable state container - Helping you write applications that behave consistently and run in different environments. |
-| [React Native Router Flux](https://github.com/aksonov/react-native-router-flux) | Router for React Native based on new React Native Navigation API. <br><br>['How to' Guide &rarr;](/src/navigation/README.md)|
-| [API Example](/docs/api.md) | A basic example showing how you can interact with a RESTful API with user authentication (JWT). |
-| [Sidebar / Hamburger Menu](https://github.com/react-native-community/react-native-side-menu) | ... |
-| [React Native Elements](https://github.com/react-native-community/react-native-elements) | Cross Platform React Native UI Toolkit. |
-| [Google Analytics](https://github.com/idehub/react-native-google-analytics-bridge) | Shows how to track screen views (includes both a 'debug' mode tracker as well as 'release' mode so that data doesn't get obfuscated). <br><br>[Setup Guide &rarr;](/docs/google-analytics.md) |
-| [React Native Vector Icons](https://github.com/oblador/react-native-vector-icons) | Easily use icons from a wide range of icon libraries, it's as simple as importing the icon font and then `<Icon name={'ios-alert-outline'} size={50} color={"#CCC"} />`. |
-| [Tcomb Form Validation](https://github.com/gcanti/tcomb-form-native) | An example on how to create forms with validation. |
-| Component Style Guide | A bunch of elements and components to get you started - styled headings, buttons, list rows, alerts etc. |
-| Code Linting / Code Style Guide | We're using [Airbnb's](https://github.com/airbnb/javascript) JS/React Style Guide with ESLint linting. <br><br>[Get started with linting for React Native &rarr;](https://medium.com/pvtl/linting-for-react-native-bdbb586ff694) |
-| Boilerplate | An example directory/file structure I've found useful for scaling apps <br><br>[Learn more &rarr;](#understanding-the-file-structure) |
+## Screenshots
+![alt text](https://cloud.githubusercontent.com/assets/3925905/24083369/39495072-0cac-11e7-995d-6968d5f64d4c.png "Landing Screen")
+![alt text](https://cloud.githubusercontent.com/assets/3925905/24083371/3949739a-0cac-11e7-9514-2f93594c94a6.png "Login Screen")
+![alt text](https://cloud.githubusercontent.com/assets/3925905/24083372/394c25ea-0cac-11e7-9731-8a1afc7b33c0.png "Browse Products Screen")
+![alt text](https://cloud.githubusercontent.com/assets/3925905/24083370/39494488-0cac-11e7-9c29-8a17c43e9b4c.png "Checkout Screen")
 
----
-
-## Getting Started
-
-1. Ensure you've followed the [React Native - Get Started Guide](https://facebook.github.io/react-native/docs/getting-started.html) for the platform/s of choice
-1. Clone this project `git clone https://github.com/mcnamee/react-native-starter-app.git`
-1. Run `npm install` from root directory
-1. Start the app in [an emulator](/docs/quick-tips.md#running-in-an-emulator)
-
----
-
-## Understanding the File Structure
-
-- `/android` - The native Android stuff
-- `/ios` - The native iOS stuff
-- `/src` - Contains the full React Native App codebase
-  - `/components` - 'Dumb-components' / presentational. [Read More &rarr;](/src/components/README.md)
-  - `/constants` - App-wide variables and config
-  - `/containers` - 'Smart-components' / the business logic. [Read More &rarr;](/src/containers/README.md)
-  - `/images` - Self explanatory right?
-  - `/lib` - Utils, custom libraries, functions
-  - `/navigation`- Routes - wire up the router with any & all screens. [Read More &rarr;](/src/navigation/README.md)
-  - `/redux` - Redux Reducers & Actions grouped by type. [Read More &rarr;](/src/redux/README.md)
-  - `/theme` - Theme specific styles and variables
+## TODO
+* Add features (My Account, My Orders, Edit Cart, etc.)
+* Write components tests
+* Code cleaning

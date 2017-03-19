@@ -8,23 +8,12 @@
 import AppUtil from '@lib/util';
 
 // Set initial state
-export const initialState = {
-    cartItems: [],
-};
+export const initialState = {};
 
 export default function cartReducer(state = initialState, action) {
     switch (action.type) {
-        case 'ADD_CART_ITEM': {
-            let cartItems = [];
-
-            // TODO: Implement
-
-            console.log('**** Cart  reducer will return ****', cartItems);
-
-            return {
-                ...state,
-                cartItems,
-            };
+        case 'CART_UPDATED': {
+            return action.data;
         }
         default:
             return state;

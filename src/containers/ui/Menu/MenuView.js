@@ -93,13 +93,21 @@ class Menu extends Component {
     this.state = {
       menu: [
         {
-          title: 'Recipes',
+          title: 'Home',
           onPress: () => { this.props.closeSideMenu(); Actions.app(); },
         },
         {
-          title: 'Example Link',
+          title: 'My Account',
           onPress: () => { this.props.closeSideMenu(); Actions.comingSoon(); },
         },
+        {
+          title: 'My Orders',
+          onPress: () => { this.props.closeSideMenu(); Actions.comingSoon(); },
+        },
+        {
+          title: 'Contact Us',
+          onPress: () => { this.props.closeSideMenu(); Actions.comingSoon(); },
+        }
       ],
     };
   }
@@ -116,8 +124,7 @@ class Menu extends Component {
           this.props.closeSideMenu();
           Actions.login();
         }).catch((err) => {
-          console.log('****, ', err);
-          //Alert.alert('Oh uh!', 'Something went wrong.');
+
         });
     }
   }
@@ -152,7 +159,7 @@ class Menu extends Component {
           <View style={[styles.menu]}>{menuItems}</View>
 
           <View style={[styles.menuBottom]}>
-            {this.props.user && this.props.user.name ?
+            {this.props.user && this.props.user.firstName && this.props.user.lastName ?
               <View>
                 <Text
                   style={[
@@ -160,7 +167,7 @@ class Menu extends Component {
                     AppStyles.textCenterAligned,
                   ]}
                 >
-                  Logged in as: {this.props.user.name}
+                  Logged in as: {this.props.user.firstName} {this.props.user.lastName}
                 </Text>
 
                 <Spacer size={10} />

@@ -5,7 +5,7 @@
  * https://github.com/mcnamee/react-native-starter-app
  */
 import React from 'react';
-import { Scene } from 'react-native-router-flux';
+import { Scene, ActionConst } from 'react-native-router-flux';
 
 // Consts and Libs
 import { AppConfig } from '@constants/';
@@ -18,10 +18,8 @@ import { NavbarMenuButton } from '@containers/ui/NavbarMenuButton/NavbarMenuButt
 // Scenes
 import Placeholder from '@components/general/Placeholder';
 import Error from '@components/general/Error';
-import StyleGuide from '@containers/StyleGuideView';
-import Recipes from '@containers/recipes/Browse/BrowseContainer';
-import RecipeView from '@containers/recipes/RecipeView';
 import ProductsView from '@containers/products/ProductsView';
+import CheckoutView from '@containers/checkout/CheckoutView';
 
 const navbarPropsTabs = {
   ...AppConfig.navbarProps,
@@ -34,7 +32,7 @@ const navbarPropsTabs = {
 
 /* Routes ==================================================================== */
 const scenes = (
-    <Scene key={'tabBar'} tabs tabBarIconContainerStyle={AppStyles.tabbar} pressOpacity={0.95}>
+    <Scene key={'tabBar'} tabs tabBarIconContainerStyle={AppStyles.tabbar} pressOpacity={0.95} type={ActionConst.RESET}>
         <Scene
             {...navbarPropsTabs}
             key={'products'}
@@ -43,7 +41,7 @@ const scenes = (
         >
             <Scene
                 {...navbarPropsTabs}
-                key={'productsListing'}
+                key={'ProductsView'}
                 component={ProductsView}
                 title={AppConfig.appName}
                 analyticsDesc={'Products: Browser Products'}
@@ -51,12 +49,12 @@ const scenes = (
         </Scene>
 
         <Scene
-            key={'styleGuide'}
+            key={'CheckoutView'}
             {...navbarPropsTabs}
-            title={'Style Guide'}
-            component={StyleGuide}
-            icon={props => TabIcon({ ...props, icon: 'speaker-notes' })}
-            analyticsDesc={'StyleGuide: Style Guide'}
+            title={'Checkout'}
+            component={CheckoutView}
+            icon={props => TabIcon({ ...props, icon: 'shopping-cart' })}
+            analyticsDesc={'CheckoutView'}
         />
     </Scene>
 );

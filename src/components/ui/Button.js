@@ -38,7 +38,7 @@ class CustomButton extends Component {
     const props = {
       title: 'Coming Soon...',
       color: '#fff',
-      fontWeight: 'bold',
+      fontWeight: '500',
       onPress: this.props.onPress,
       fontFamily: AppFonts.base.family,
       fontSize: AppFonts.base.size,

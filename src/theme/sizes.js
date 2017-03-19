@@ -29,5 +29,5 @@ export default {
   padding: 15,
   paddingSml: 5,
 
-  borderRadius: 2,
+  borderRadius: 1,
 };

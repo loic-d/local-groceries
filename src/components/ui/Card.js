@@ -41,6 +41,7 @@ class CustomCard extends Component {
         backgroundColor: AppColors.cardBackground,
         borderRadius: AppSizes.borderRadius,
         borderColor: AppColors.border,
+        shadowColor: 'rgba(0,0,0,.1)',
         flex: 1
       }],
       titleStyle: [

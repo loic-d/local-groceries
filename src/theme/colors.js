@@ -6,7 +6,7 @@
  */
 
 const app = {
-  background: '#EFEFEF',
+  background: '#F1F1F1',
   cardBackground: '#FFFFFF',
   listItemBackground: '#FFFFFF',
 };
@@ -19,14 +19,14 @@ const brand = {
 };
 
 const text = {
-  textPrimary: '#222222',
+  textPrimary: '#444444',
   textSecondary: '#777777',
   headingPrimary: brand.brand.primary,
   headingSecondary: brand.brand.primary,
 };
 
 const borders = {
-  border: '#D0D1D5',
+  border: '#EAEAEB',
 };
 
 const tabbar = {

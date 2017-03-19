@@ -44,6 +44,7 @@ class CustomFormInput extends Component {
             marginTop: 10,
             marginLeft: 20,
             marginRight: 20,
+            borderRadius: 0,
           },
         }),
       }],
@@ -51,7 +52,7 @@ class CustomFormInput extends Component {
         color: AppColors.textPrimary,
         fontFamily: AppFonts.base.family,
         paddingHorizontal: 10,
-        paddingVertical: 3,
+        paddingVertical: 3
       }],
     };
 
